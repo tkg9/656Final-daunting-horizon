@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ production.title }}{% endblock %}
+{% block content %}
+  <h1>{{ production.title }}</h1>
+  <p>Your role: {{ membership.get_role_display }}</p>
+
+  <h2>Company</h2>
+  <ul>
+    {% for m in members %}<li>{{ m.user.username }}: {{ m.get_role_display }}</li>{% endfor %}
+  </ul>
+
+  <h2>Script</h2>
+  {% if can_edit %}<p><a href="{% url 'script-upload' production.pk %}">{% if scenes %}Replace{% else %}Paste in{% endif %} the script</a></p>{% endif %}
+  {% if scenes %}
+    <p><a href="{% url 'breakdown' production.pk %}">Draft a script breakdown</a></p>
+    {% for scene in scenes %}
+      <h3>{{ scene.number }}. {{ scene.heading }}</h3>
+      <pre>{{ scene.text }}</pre>
+    {% endfor %}
+  {% else %}
+    <p>No script yet.</p>
+  {% endif %}
+{% endblock %}

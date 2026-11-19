@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Script · {{ production.title }}{% endblock %}
+{% block content %}
+  <h1>Script for {{ production.title }}</h1>
+  <p>Paste the full script. Lines starting with ACT or SCENE begin a new scene. Saving replaces any existing scenes.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save script</button>
+  </form>
+{% endblock %}
