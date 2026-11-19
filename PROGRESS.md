@@ -13,6 +13,7 @@ One line per person: who is working on what.
 
 Newest first: date, who, what, PR.
 
+- 2026-11-18, Baggs99, script breakdown calls OpenRouter; talented-moose added to the roster
 - 2026-11-18, tkg9, staging and production live on Render with separate Neon databases
 - 2026-11-18, tkg9, US-1/US-2 shipped and US-3 started: productions, script scenes, rule-based breakdown (#5)
 - 2026-11-18, tkg9, prompts folder and log (#4)
@@ -29,6 +30,6 @@ Decision, reason, date.
 
 ## Blocked / questions
 
-- Course nicknames for four members (needed in team.yaml and the A/B page)
+- Course nicknames still missing for Lasya1106 and msomoyeeta. Baggs99 is talented-moose.
 - Team to review the drafted user stories (docs/user-stories.md)
 - GitHub Project board needs the `project` scope on the gh token

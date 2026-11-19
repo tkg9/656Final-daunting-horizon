@@ -12,10 +12,10 @@ shipped through pull requests, and the AI feature started.
   productions they belong to ([#5](https://github.com/tkg9/656Final-daunting-horizon/pull/5))
 - US-2, paste a script: split into scenes at ACT/SCENE headings; only
   directors and stage managers can edit ([#5](https://github.com/tkg9/656Final-daunting-horizon/pull/5))
-- US-3 started, AI script breakdown: `productions/breakdown.py` drafts the
-  characters in each scene for the director to review. This first version is
-  rule-based; the LLM backend replaces it behind the same function, so views
-  and tests stay put ([#5](https://github.com/tkg9/656Final-daunting-horizon/pull/5))
+- US-3 started, AI script breakdown: `productions/breakdown.py` asks
+  OpenRouter for the characters in each scene when `OPENROUTER_API_KEY` is
+  set, and parses the script text when the key is missing or the call fails.
+  Tests mock the HTTP call and never hit OpenRouter.
 - `prompts/` folder and log, so any teammate can queue work for the coding
   agent and see when it's done ([#4](https://github.com/tkg9/656Final-daunting-horizon/pull/4))
 - 22 tests, run against Postgres on every pull request
@@ -37,5 +37,5 @@ Render without being pasted into chat or committed.
 ## Backlog changes for next sprint
 
 - Finish US-1: invite members by email with a role
-- US-3: switch the breakdown to an LLM and add props, costumes and cues
+- US-3: ask the model for props, costumes, set pieces, and cues
 - US-4 to US-7: casting, rehearsals, attendance, the actor view

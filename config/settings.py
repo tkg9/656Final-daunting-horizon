@@ -134,7 +134,12 @@ TEAM_NICKNAME = 'daunting-horizon'
 TEAM_MEMBERS = [
     'quaint-chinchilla',
     'elated-bison',
+    'talented-moose',
 ]
+
+# Server-side script breakdown. Empty key means the script parser is used.
+OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
+OPENROUTER_MODEL = os.environ.get('OPENROUTER_MODEL', 'openai/gpt-4o-mini')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

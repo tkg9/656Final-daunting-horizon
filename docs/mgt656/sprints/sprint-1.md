@@ -5,12 +5,12 @@ deploy, tests) before building StageCraft features.
 
 ## What shipped
 
-- Django app with user accounts on Postgres ([#1](https://github.com/tkg9/656Final/pull/1))
+- Django app with user accounts on Postgres ([#1](https://github.com/tkg9/656Final-daunting-horizon/pull/1))
 - Seed command for the grader accounts: `python manage.py seed`
 - A/B test page at `/bdcabb0` and live stats at `/bdcabb0/stats`
 - Unit tests for A/B counting and the seed command, run by GitHub Actions
-  against Postgres on every pull request ([#2](https://github.com/tkg9/656Final/pull/2))
-- Team roster in `team.yaml` and on the A/B page ([#3](https://github.com/tkg9/656Final/pull/3))
+  against Postgres on every pull request ([#2](https://github.com/tkg9/656Final-daunting-horizon/pull/2))
+- Team roster in `team.yaml` and on the A/B page ([#3](https://github.com/tkg9/656Final-daunting-horizon/pull/3))
 
 ## What works on staging
 

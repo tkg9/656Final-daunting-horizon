@@ -22,6 +22,7 @@ class AbPageTests(TestCase):
         self.assertEqual(len(found), 1)
         self.assertIn(found[0], ("kudos", "thanks"))
         self.assertContains(r, "quaint-chinchilla")
+        self.assertContains(r, "talented-moose")
 
     def test_reload_keeps_variant_and_one_impression(self):
         first = buttons(self.client.get(PAGE).content.decode())[0]
