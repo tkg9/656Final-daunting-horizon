@@ -3,6 +3,7 @@
 {% block content %}
   <h1>Script breakdown: {{ production.title }}</h1>
   <p>Draft suggestions for review. Nothing here is saved yet.</p>
+  <p>{% if breakdown.source == "llm" %}Drafted with the model.{% else %}Drafted from the script text.{% endif %}</p>
   <h2>Characters</h2>
   <ul>{% for c in breakdown.characters %}<li>{{ c }}</li>{% empty %}<li>None found.</li>{% endfor %}</ul>
   <h2>Who appears in each scene</h2>

@@ -1,12 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from productions.models import Membership, Production
 
 SCRIPT = "SCENE 1. Here.\nANNA: Hi.\nSCENE 2. There.\nBEN: Bye."
 
 
+@override_settings(OPENROUTER_API_KEY="")
 class ProductionTests(TestCase):
     def setUp(self):
         User = get_user_model()

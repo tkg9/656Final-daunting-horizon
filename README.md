@@ -19,6 +19,7 @@ python manage.py runserver   # http://127.0.0.1:8000
 ```
 
 Without `DATABASE_URL` the app uses a local SQLite file; staging uses Postgres.
+Set `OPENROUTER_API_KEY` to draft script breakdowns with OpenRouter. With no key, the breakdown is parsed from the script text. `OPENROUTER_MODEL` defaults to `openai/gpt-4o-mini`.
 
 ## Test
 
