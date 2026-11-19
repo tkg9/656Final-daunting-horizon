@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>StageCraft</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<hgroup>
   <h1>StageCraft</h1>
-  <p>A backstage assistant for stage managers and crews.</p>
-  {% if user.is_authenticated %}
-    <p>Signed in as {{ user.username }}.</p>
-    <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Log out</button></form>
-  {% else %}
-    <p><a href="{% url 'login' %}">Log in</a></p>
-  {% endif %}
-</body>
-</html>
+  <p>Theatre production management, from script to stage.</p>
+</hgroup>
+<p>Paste in your script and StageCraft's AI drafts the breakdown: characters, scenes, props, costumes, set pieces and suggested cues.</p>
+{% if user.is_authenticated %}
+  <p>Signed in as {{ user.username }}.</p>
+  <a href="{% url 'production-list' %}" role="button">Your productions</a>
+{% else %}
+  <div class="grid">
+    <a href="{% url 'signup' %}" role="button">Sign up</a>
+    <a href="{% url 'login' %}" role="button" class="secondary outline">Log in</a>
+  </div>
+{% endif %}
+{% endblock %}

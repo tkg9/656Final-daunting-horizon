@@ -1,0 +1,7 @@
+/* Small additions on top of Pico CSS. */
+nav form { margin: 0; }
+nav button { margin: 0; padding: 0.35rem 0.9rem; }
+.message.success { border-left: 4px solid var(--pico-ins-color); }
+.message.error { border-left: 4px solid var(--pico-del-color); }
+.errorlist { color: var(--pico-del-color); list-style: none; padding: 0; }
+.script { white-space: pre-wrap; font-family: var(--pico-font-family-monospace); font-size: 0.9em; }

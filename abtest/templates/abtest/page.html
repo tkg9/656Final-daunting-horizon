@@ -1,11 +1,13 @@
-<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ team }}</title>
+  <link rel="stylesheet" href="{% static 'vendor/pico/pico.min.css' %}">
 </head>
 <body>
+  <main class="container">
   <h1>Team {{ team }}</h1>
   <ul>
     {% for member in members %}<li>{{ member }}</li>{% endfor %}
@@ -14,5 +16,6 @@
     {% csrf_token %}
     <button id="abtest" type="submit">{{ variant }}</button>
   </form>
+  </main>
 </body>
 </html>

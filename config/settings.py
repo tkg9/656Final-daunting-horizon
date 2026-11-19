@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,13 +23,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-only-not-secret')
-
-# SECURITY WARNING: don't run with debug turned on in production!
+# All configuration comes from environment variables (12-factor). The defaults
+# below are for local development only; staging and production set DEBUG=0,
+# and then SECRET_KEY and DATABASE_URL are required.
 DEBUG = os.environ.get('DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+def required_in_production(name, dev_default):
+    value = os.environ.get(name)
+    if value:
+        return value
+    if DEBUG:
+        return dev_default
+    raise ImproperlyConfigured(f'{name} must be set when DEBUG=0')
+
+
+SECRET_KEY = required_in_production('SECRET_KEY', 'dev-only-not-secret')
+
+ALLOWED_HOSTS = [h for h in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h]
+# Render sets this to the service's public hostname.
+if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+    ALLOWED_HOSTS.append(os.environ['RENDER_EXTERNAL_HOSTNAME'])
 CSRF_TRUSTED_ORIGINS = [f'https://{h}' for h in ALLOWED_HOSTS if h not in ('localhost', '127.0.0.1')]
 
 
@@ -42,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'abtest',
+    'accounts',
+    'productions',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +95,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Attached by URL. Staging and production each have their own Postgres database.
+# Locally, without DATABASE_URL, a SQLite file is used.
 DATABASES = {
-    'default': dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600),
+    'default': dj_database_url.parse(
+        required_in_production('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        conn_max_age=600,
+    ),
 }
 
 
@@ -119,9 +141,33 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'production-list'
+LOGOUT_REDIRECT_URL = 'home'
+
+# Logs go to stdout; the platform collects them.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'plain': {'format': '{levelname} {name}: {message}', 'style': '{'},
+    },
+    'handlers': {
+        'stdout': {'class': 'logging.StreamHandler', 'stream': 'ext://sys.stdout', 'formatter': 'plain'},
+    },
+    'root': {'handlers': ['stdout'], 'level': os.environ.get('LOG_LEVEL', 'INFO')},
+}
+
+# AI features call OpenRouter from the server. Without a key the AI button
+# explains that AI is not configured instead of failing.
+OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
+OPENROUTER_MODEL = os.environ.get('OPENROUTER_MODEL', 'anthropic/claude-sonnet-5.5')
+OPENROUTER_TIMEOUT = int(os.environ.get('OPENROUTER_TIMEOUT', '60'))
+
+# Tests run with the OpenRouter key blanked so they can never reach the real LLM.
+TEST_RUNNER = 'config.test_runner.NoExternalServicesRunner'
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

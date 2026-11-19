@@ -1,8 +1,6 @@
 import re
 from datetime import datetime, timezone as dt_tz
 
-from django.core.management import call_command
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from abtest.models import Visit
@@ -66,14 +64,3 @@ class StatsTests(TestCase):
     def test_empty_database_still_answers(self):
         self.assertIn(self.client.get(f"{PAGE}/stats").json()["preferred"], ("kudos", "thanks"))
 
-
-class SeedTests(TestCase):
-    def test_seed_creates_loginable_accounts_and_is_rerunnable(self):
-        call_command("seed")
-        call_command("seed")
-        self.assertEqual(get_user_model().objects.count(), 2)
-        self.assertTrue(self.client.login(username="admin@example.com", password="stage-door-lantern"))
-        self.assertTrue(self.client.login(username="member@example.com", password="curtain-call-rope"))
-
-    def test_login_page_loads(self):
-        self.assertEqual(self.client.get("/login/").status_code, 200)

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{% if production %}Edit {{ production.title }}{% else %}New production{% endif %} · StageCraft{% endblock %}
+{% block content %}
+<h1>{% if production %}Edit {{ production.title }}{% else %}New production{% endif %}</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_div }}
+  <div class="grid">
+    <button type="submit">Save</button>
+    <a href="{% if production %}{{ production.get_absolute_url }}{% else %}{% url 'production-list' %}{% endif %}" role="button" class="secondary outline">Cancel</a>
+  </div>
+</form>
+{% endblock %}

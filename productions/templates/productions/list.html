@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Productions · StageCraft{% endblock %}
+{% block content %}
+<h1>Your productions</h1>
+{% for production in productions %}
+  <article>
+    <header><a href="{{ production.get_absolute_url }}"><strong>{{ production.title }}</strong></a></header>
+    <small>Created {{ production.created_at|date:"M j, Y" }} · {{ production.breakdowns.count }} AI breakdown{{ production.breakdowns.count|pluralize }}</small>
+  </article>
+{% empty %}
+  <p>No productions yet.</p>
+{% endfor %}
+<a href="{% url 'production-create' %}" role="button">New production</a>
+{% endblock %}

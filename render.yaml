@@ -1,18 +1,42 @@
+# Two public environments from this repo, each with its own Postgres database.
+#   staging:    deploys every push to main
+#   production: deploys the production branch (release = PR from main to production)
+# Values marked sync: false are entered in the Render dashboard, never committed.
 services:
   - type: web
     name: daunting-horizon-staging
     runtime: python
     plan: free
+    branch: main
     buildCommand: ./build.sh
-    startCommand: gunicorn config.wsgi
+    startCommand: gunicorn config.wsgi --bind 0.0.0.0:$PORT --timeout 120 --access-logfile -
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.5
       - key: DEBUG
         value: "0"
-      - key: ALLOWED_HOSTS
-        value: daunting-horizon-staging.onrender.com
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+  - type: web
+    name: daunting-horizon
+    runtime: python
+    plan: free
+    branch: production
+    buildCommand: ./build.sh
+    startCommand: gunicorn config.wsgi --bind 0.0.0.0:$PORT --timeout 120 --access-logfile -
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: DEBUG
+        value: "0"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENROUTER_API_KEY
         sync: false

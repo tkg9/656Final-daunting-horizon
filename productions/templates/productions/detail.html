@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ production.title }} · StageCraft{% endblock %}
+{% block content %}
+<hgroup>
+  <h1>{{ production.title }}</h1>
+  <p><a href="{% url 'production-edit' production.pk %}">Edit title and script</a></p>
+</hgroup>
+
+<details>
+  <summary>Script ({{ production.script|wordcount }} words)</summary>
+  {% if production.script %}<div class="script">{{ production.script }}</div>{% else %}<p>No script yet.</p>{% endif %}
+</details>
+
+<section>
+  <h2>AI script breakdown</h2>
+  <form method="post" action="{% url 'production-breakdown' production.pk %}"
+        onsubmit="this.querySelector('button').setAttribute('aria-busy', 'true')">
+    {% csrf_token %}
+    <button type="submit" {% if not production.script or not ai_configured %}disabled{% endif %}>
+      {% if breakdown %}Draft a new breakdown{% else %}Draft breakdown with AI{% endif %}
+    </button>
+  </form>
+  {% if not ai_configured %}
+    <p><small>AI isn't configured on this server yet.</small></p>
+  {% elif not production.script %}
+    <p><small>Add the script first.</small></p>
+  {% endif %}
+
+  {% if breakdown %}
+    {% with d=breakdown.data %}
+    <p><small>Drafted {{ breakdown.created_at|timesince }} ago by {{ breakdown.model }}. This is a draft: check it against the script.</small></p>
+    <div class="grid">
+      <article>
+        <header><strong>Characters</strong></header>
+        <ul>{% for c in d.characters %}<li><strong>{{ c.name }}</strong>{% if c.description %}: {{ c.description }}{% endif %}</li>{% empty %}<li>None found</li>{% endfor %}</ul>
+      </article>
+      <article>
+        <header><strong>Scenes</strong></header>
+        <ol>{% for s in d.scenes %}<li>{{ s.title }}{% if s.characters %}<br><small>{{ s.characters|join:", " }}</small>{% endif %}</li>{% empty %}<li>None found</li>{% endfor %}</ol>
+      </article>
+    </div>
+    <div class="grid">
+      <article>
+        <header><strong>Props</strong></header>
+        <ul>{% for item in d.props %}<li>{{ item }}</li>{% empty %}<li>None found</li>{% endfor %}</ul>
+      </article>
+      <article>
+        <header><strong>Costumes</strong></header>
+        <ul>{% for item in d.costumes %}<li>{{ item }}</li>{% empty %}<li>None found</li>{% endfor %}</ul>
+      </article>
+      <article>
+        <header><strong>Set pieces</strong></header>
+        <ul>{% for item in d.set_pieces %}<li>{{ item }}</li>{% empty %}<li>None found</li>{% endfor %}</ul>
+      </article>
+    </div>
+    <article>
+      <header><strong>Suggested cues</strong></header>
+      {% if d.cues %}
+        <div class="overflow-auto">
+          <table>
+            <thead><tr><th>Scene</th><th>Kind</th><th>Cue</th></tr></thead>
+            <tbody>{% for c in d.cues %}<tr><td>{{ c.scene }}</td><td>{{ c.kind }}</td><td>{{ c.description }}</td></tr>{% endfor %}</tbody>
+          </table>
+        </div>
+      {% else %}<p>None found</p>{% endif %}
+    </article>
+    {% endwith %}
+  {% endif %}
+</section>
+{% endblock %}
