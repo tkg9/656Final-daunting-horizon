@@ -133,7 +133,9 @@ if not DEBUG:
 TEAM_NICKNAME = 'daunting-horizon'
 TEAM_MEMBERS = [
     'quaint-chinchilla',
+    'charming-ostrich',
     'elated-bison',
+    'lucky-badger',
     'talented-moose',
 ]
 
