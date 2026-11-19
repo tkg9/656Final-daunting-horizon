@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}My productions{% endblock %}
+{% block content %}
+  <h1>My productions</h1>
+  <p><a href="{% url 'production-create' %}">New production</a></p>
+  <ul>
+    {% for m in memberships %}
+      <li><a href="{% url 'production-detail' m.production.pk %}">{{ m.production.title }}</a> ({{ m.get_role_display }})</li>
+    {% empty %}
+      <li>No productions yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
