@@ -6,6 +6,7 @@ MGT 656 (Fall 2026) final project, team daunting-horizon.
 - [Project proposal](docs/proposal.md)
 - [User stories](docs/user-stories.md)
 - [Progress log](PROGRESS.md)
+- [Prompts for the coding agent](prompts/README.md)
 
 ## Run locally
 
