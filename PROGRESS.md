@@ -13,6 +13,7 @@ One line per person: who is working on what.
 
 Newest first: date, who, what, PR.
 
+- 2026-11-27, tkg9, Sign in with Google on the login page
 - 2026-11-18, Baggs99, script breakdown calls OpenRouter; talented-moose added to the roster
 - 2026-11-18, tkg9, staging and production live on Render with separate Neon databases
 - 2026-11-18, tkg9, US-1/US-2 shipped and US-3 started: productions, script scenes, rule-based breakdown (#5)
